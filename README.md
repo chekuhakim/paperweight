@@ -1,3 +1,4 @@
+```markdown
 ## Paperweight: Open-Source PDF Compression
 
 **Welcome to Paperweight, a self-hosted open-source PDF compression tool built with Python and Bottle!**
@@ -14,9 +15,20 @@ This repository contains the source code for Paperweight, allowing you to easily
 
 **Installation:**
 
+**Option 1: Docker**
+
 1.  **Pull the Docker image:** `docker pull chekuhakim/paperweight`
 2.  **Run the container:** `docker run -p 8000:8000 chekuhakim/paperweight`
 3.  **Access the web interface:** Open your web browser and navigate to `http://localhost:8000/` (or the corresponding IP address and port if running on a server).
+
+**Option 2: Manual Installation**
+
+1.  **Clone the repository:** `git clone https://github.com/your-username/paperweight.git`
+2.  **Install dependencies:** 
+    *   Ensure you have Python 3.7+ installed.
+    *   Install required packages: `pip install bottle ghostscript`
+3.  **Run the application:** `python paperweight.py`
+4.  **Access the web interface:** Open your web browser and navigate to `http://localhost:1234/` (or the corresponding IP address and port if running on a server).
 
 **Usage:**
 
@@ -29,4 +41,6 @@ This repository contains the source code for Paperweight, allowing you to easily
 
 *   The Docker image includes all necessary dependencies, including Python, Bottle, and Ghostscript.
 *   You can adjust the port mapping (`-p 8000:8000`) in the `docker run` command if needed. 
-*   The provided code includes a basic HTML template (`index.html`) for the web interface. You can customize this template to fit your preferences.
+*   For manual installation, ensure Ghostscript is installed and accessible on your system. You can adjust the port number and host address in the `paperweight.py` file if needed. 
+*   The provided code includes a basic HTML template (`index.html`) for the web interface. You can customize this template to fit your preferences. 
+``` 
