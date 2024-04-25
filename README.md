@@ -26,7 +26,7 @@ This repository contains the source code for Paperweight, allowing you to easily
 2.  **Install dependencies:** 
     *   Ensure you have Python 3.7+ installed.
     *   Install required packages: `pip install bottle ghostscript`
-3.  **Run the application:** `python paperweight.py`
+3.  **Run the application:** `python app.py`
 4.  **Access the web interface:** Open your web browser and navigate to `http://localhost:1234/` (or the corresponding IP address and port if running on a server).
 
 **Usage:**
