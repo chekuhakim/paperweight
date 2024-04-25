@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Compress PDF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Compress PDF</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" id="file-input">
+        <label for="compression-level">Target Compression Level:</label>
+        <input type="range" id="compression-level" name="compression-level" min="10" max="90" value="50">
+        <span id="compression-level-value">50%</span>
+        <input type="submit" value="Compress PDF">
+    </form>
+    <div class="footer">
+        This is a open source PDF Compressor
+    </div>
+
+    <script>
+        const compressionLevelSlider = document.getElementById('compression-level');
+        const compressionLevelValue = document.getElementById('compression-level-value');
+
+        compressionLevelSlider.addEventListener('input', () => {
+            compressionLevelValue.textContent = `${compressionLevelSlider.value}%`;
+        });
+
+        const fileInput = document.getElementById('file-input');
+
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            const uploadPercentage = document.createElement('p');
+            uploadPercentage.textContent = 'Upload progress: 0%';
+            document.body.appendChild(uploadPercentage);
+
+            const reader = new FileReader();
+            reader.onprogress = (event) => {
+                if (event.lengthComputable) {
+                    const progress = Math.round((event.loaded / event.total) * 100);
+                    uploadPercentage.textContent = `Upload progress: ${progress}%`;
+                }
+            };
+            reader.onload = () => {
+                const processingPercentage = document.createElement('p');
+                processingPercentage.textContent = 'Processing: 0%';
+                document.body.appendChild(processingPercentage);
+
+                // Simulate processing progress
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 10;
+                    processingPercentage.textContent = `Processing: ${progress}%`;
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        processingPercentage.textContent = 'Processing: 100%';
+                        // Submit the form or perform other actions
+                    }
+                }, 500);
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
+</body>
+</html>
