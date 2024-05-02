@@ -1,40 +1,41 @@
 from bottle import Bottle, request, response, static_file, template
 import subprocess
 import os
-from socket import gethostname, gethostbyname
 import tempfile
 import shutil
 
 app = Bottle()
 
 def compress_pdf_file(input_file, output_file, compression_level):
-    try:
-        compression_settings = {
-            10: '/screen',
-            20: '/ebook',
-            30: '/printer',
-            40: '/prepress',
-            50: '/default',
-            60: '/printer',
-            70: '/prepress',
-            80: '/ebook',
-            90: '/screen'
-        }
-        quality = compression_settings.get(int(compression_level), '/default')
-        with open('ghostscript.log', 'w') as log_file:
-            subprocess.run(['gs', '-q', '-r72', '-dBATCH', '-dNOPAUSE', '-sDEVICE=pdfwrite',
-                            '-dCompatibilityLevel=1.5', '-dColorConversionStrategy=/LeaveColorUnchanged',
-                            f'-dPDFSETTINGS={quality}', '-dPDFSETTINGS=/printer', '-dEmbedAllFonts=true', '-dSubsetFonts=true',
-                            '-dAutoRotatePages=/None', '-dColorImageDownsampleType=/Bicubic',
-                            '-dGrayImageDownsampleType=/Bicubic', '-dMonoImageDownsampleType=/Subsample',
-                            '-dGrayImageResolution=72', '-dColorImageResolution=72', '-dMonoImageResolution=72',
-                            '-sOutputFile=' + output_file, input_file], check=True, stdout=log_file, stderr=subprocess.STDOUT)
-    except subprocess.CalledProcessError as e:
-        print(f"Error compressing PDF: {e}")
+    compression_settings = {
+        10: '/screen',
+        20: '/ebook',
+        30: '/printer',
+        40: '/prepress',
+        50: '/default',
+        60: '/printer',
+        70: '/prepress',
+        80: '/ebook',
+        90: '/screen'
+    }
+    quality = compression_settings.get(int(compression_level), '/default')
+    with open('ghostscript.log', 'w') as log_file:
+        try:
+            subprocess.run([
+                'gs', '-q', '-dBATCH', '-dNOPAUSE', '-sDEVICE=pdfwrite',
+                '-dCompatibilityLevel=1.5', '-dColorConversionStrategy=/LeaveColorUnchanged',
+                f'-dPDFSETTINGS={quality}', '-dEmbedAllFonts=true', '-dSubsetFonts=true',
+                '-dAutoRotatePages=/None', '-dColorImageDownsampleType=/Bicubic',
+                '-dGrayImageDownsampleType=/Bicubic', '-dMonoImageDownsampleType=/Subsample',
+                '-dGrayImageResolution=72', '-dColorImageResolution=72', '-dMonoImageResolution=72',
+                '-sOutputFile=' + output_file, input_file
+            ], check=True, stdout=log_file, stderr=subprocess.STDOUT)
+        except subprocess.CalledProcessError as e:
+            print(f"Error compressing PDF: {e}")
 
 @app.route('/', method='GET')
-def index():
-    return template('index.html')
+def show_form():
+    return template('index.html', message="Please upload a file and select a compression level.")
 
 @app.route('/', method='POST')
 def compress_pdf():
@@ -53,15 +54,18 @@ def compress_pdf():
 
             compress_pdf_file(input_path, output_path, compression_level)
 
+            original_size = os.path.getsize(input_path)
+            compressed_size = os.path.getsize(output_path)
+            size_reduction = 100 * (1 - (compressed_size / original_size))
+
+            response.content_type = 'application/pdf'
             response.headers['Content-Disposition'] = f'attachment; filename="{output_filename}"'
-            return static_file(output_filename, root=temp_dir, download=output_filename)
+            message = f"File compressed successfully. Size reduced by {size_reduction:.2f}%."
+            return template('index.html', message=message, download_link=f'/download/{filename}')
         finally:
             shutil.rmtree(temp_dir)
+    else:
+        return template('index.html', message="Please upload a file and select a compression level.")
 
 if __name__ == '__main__':
-    hostname = gethostname()
-    local_ip = gethostbyname(hostname)
-    print(f" * Running on http://0.0.0.0:1234/")
-    print(f" * Running on http://{local_ip}:1234/")
-    print(f" * Running on http://{gethostbyname(gethostname())}:1234/")
-    app.run(host='0.0.0.0', port=1234)
+    app.run(host='0.0.0.0', port=1434)
