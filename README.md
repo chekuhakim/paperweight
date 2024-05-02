@@ -1,3 +1,7 @@
+
+
+
+![logo](https://i.imgur.com/UlkICmf.png)
 ## Paperweight: Open-Source PDF Compression
 
 **Welcome to Paperweight, a self-hosted open-source PDF compression tool built with Python and Bottle!**
