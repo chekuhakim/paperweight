@@ -1,65 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Compress PDF</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Compressor</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
-            padding: 20px;
             margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
         }
         h1 {
             color: #333;
         }
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: auto;
-            width: 100%;
-            max-width: 600px;
+        label {
+            margin-top: 10px;
         }
-        input[type="file"], select, input[type="submit"] {
-            margin-bottom: 10px;
+        input[type="file"], select, button {
             width: 100%;
             padding: 8px;
+            margin-top: 5px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        input[type="submit"] {
+        button {
             background-color: #4CAF50;
             color: white;
+            font-size: 16px;
             border: none;
             cursor: pointer;
         }
+        button:hover {
+            background-color: #45a049;
+        }
         .footer {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #666;
             text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <h1>Compress PDF</h1>
-    <form action="" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" id="file-input">
-        <label for="compression-level">Target Compression Level:</label>
-        <select id="compression-level" name="compression-level">
-            <option value="10">Screen - Lowest Quality</option>
-            <option value="20">Ebook - Lower Quality</option>
-            <option value="30">Printer - Medium Quality</option>
-            <option value="40">Prepress - High Quality</option>
-            <option value="50" selected>Default - Balanced Quality</option>
-            <option value="60">Printer - Medium Quality</option>
-            <option value="70">Prepress - High Quality</option>
-        </select>
-        <input type="submit" value="Compress PDF">
-    </form>
-    <div class="footer">This is an open source PDF Compressor</div>
-    <p>{{message}}</p>
+    <div class="container">
+        <h1>Compress PDF</h1>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <label for="file">Choose PDF to compress:</label>
+            <input type="file" id="file" name="file" required>
+            
+            <label for="compression-level">Compression Level:</label>
+            <select id="compression-level" name="compression-level">
+                <option value="screen">Screen - Low Resolution</option>
+                <option value="ebook">Ebook - Medium Resolution</option>
+                <option value="printer">Printer - High Resolution</option>
+                <option value="prepress">Prepress - Very High Resolution</option>
+                <option value="default" selected>Default - Balanced</option>
+            </select>
+            
+            <button type="submit">Compress PDF</button>
+        </form>
+    </div>
+    <div class="footer">
+        © 2024 Paperweight 
+    </div>
 </body>
 </html>
